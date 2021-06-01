@@ -2,10 +2,11 @@ import {World} from './world.js'
 import {Loger} from './loger.js'
 import { Battleground } from './battleground.js'
 import { SoundController } from './sound.js'
-import {ItemCreator} from "./scripts/items/item_creator.js";
+import {ItemCreator} from "./scripts/items/item_creator.js"
 import { Inventory } from './inventory.js'
 import { Craft } from './craft.js'
 import { Intro } from './intro.js'
+import {SkillTree} from "./skilltree.js"
 
 export class Game{
 
@@ -51,7 +52,7 @@ export class Game{
                     Game.town.enterToTown(this.inventory, false)
                     break;
                 case 'skill_tree':
-                    Game.world.player.openTree()
+                    SkillTree.openTree(this.world.player)
                     break;
                 case 'craft':
                     Game.craft.open()

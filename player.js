@@ -1,5 +1,5 @@
 import { Loger } from './loger.js';
-import {Skilltree} from './skilltree.js'
+import {SkillTree} from './skilltree.js'
 import { Functions} from "./functions.js";
 import {Game} from "./main.js";
 export class Player{
@@ -24,7 +24,6 @@ export class Player{
         this.world = world
         this.skill_panel = [{},{},{}];
         this.skill_point = 0
-        this.skill_tree = new Skilltree()
         this.skill_page = 'elemental'
         this.skill_tree_open = false
         this.gold = 10;
@@ -104,7 +103,7 @@ export class Player{
                         Game.game = 'inventory';
                         break;
                     case 84:
-                        this.world.game.game = 'skill_tree';
+                        Game.game = 'skill_tree';
                         break;
                     case 67:
                         this.world.game.game = 'craft';

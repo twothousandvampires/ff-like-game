@@ -1,6 +1,10 @@
-import {Enemy} from './enemy.js'
+import {Enemy} from './scripts/enemy/enemy.js'
 import { ItemCreator } from "./scripts/items/item_creator.js";
 import { Loger } from './loger.js';
+import {Skeleton} from "./scripts/enemy/skeleton.js";
+import {SkeletonArcher} from "./scripts/enemy/skelton_archer.js";
+import {Wolf} from "./scripts/enemy/wolf.js";
+import {FireElemental} from "./scripts/enemy/fire_elemental.js";
 
 export class EnemyStack{
     constructor(world,x,y,stack,q,q_item){        
@@ -22,6 +26,7 @@ export class EnemyStack{
         if(q_item){
             this.quset_item = quset_item
         }
+        console.log(this)
     }
 
     parseStack(stack){
@@ -53,16 +58,16 @@ export class EnemyStack{
             this.count_of_enemy ++
             switch(stack[i]){
                 case "s":                   
-                    this.enemy.push(new Enemy('s', i, this, this.world));
+                    this.enemy.push(new Skeleton(i, this));
                 break;
                 case "sa":
-                    this.enemy.push(new Enemy('sa', i, this, this.world));
+                    this.enemy.push(new SkeletonArcher(i, this));
                 break;
                 case "w":
-                    this.enemy.push(new Enemy('w', i, this, this.world));
+                    this.enemy.push(new Wolf(i, this));
                 break;
                 case "fe":
-                    this.enemy.push(new Enemy('fe', i, this, this.world));
+                    this.enemy.push(new FireElemental(i, this));
                 break;
             }
 

@@ -1,5 +1,6 @@
 import {Inventory} from "./inventory.js";
 import {Game} from "./main.js";
+import { SkillTree } from "./skilltree.js";
 
 export class HTMLRender{
 
@@ -516,5 +517,60 @@ export class HTMLRender{
 		if(elem){
 			elem.parentNode.removeChild(elem)
 		}
+	}
+
+	static drawSkillTree(player){
+		let to_delete = document.getElementById('skill_container')
+		if(to_delete){
+			to_delete.parentNode.removeChild(to_delete)
+		}
+
+		let skill_container = document.createElement('div');
+		skill_container.id = 'skill_container';
+
+		let menu = HTMLRender.createSkillMenu(player);
+
+		let main_page = HTMLRender.createSkillPage(SkillTree.page)
+
+		skill_container.appendChild(menu)
+		skill_container.appendChild(main_page)
+		document.getElementById('body').appendChild(skill_container)
+	}
+
+	static createSkillPage(page){
+		let container = document.createElement('div')
+
+		for (let i = 0; i < SkillTree.trees[page].length; i ++ ){
+			let skill = SkillTree.trees[page][i]
+			let elem = document.createElement('div')
+
+			let img = document.createElement('img')
+			img.src = skill.image_path
+			elem.appendChild(img)
+
+			let name = document.createElement('p')
+			name.innerText = skill.name
+
+			elem.appendChild(name)
+			container.appendChild(elem)
+		}
+
+		return container
+	}
+
+	static createSkillMenu(player){
+		let container = document.createElement('div')
+
+		for ( let i = 0; i < SkillTree.pages.length; i++ ){
+			let elem = document.createElement('div')
+			elem.innerText = SkillTree.pages[i]
+
+			elem.addEventListener('click', (e)=>{
+				SkillTree.page = i
+				HTMLRender.drawSkillTree(player)
+			})
+			container.appendChild(elem)
+		}
+		return container
 	}
 }

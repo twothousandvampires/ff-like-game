@@ -1,5 +1,5 @@
 import { Loger } from "../loger.js"
-import {Enemy} from "../enemy.js";
+import {Enemy} from "../scripts/enemy/enemy.js";
 
 
 export class Fireball{

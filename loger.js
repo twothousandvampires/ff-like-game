@@ -1,5 +1,5 @@
 import {Player} from './player.js'
-import {Enemy} from './enemy.js'
+import {Enemy} from './scripts/enemy/enemy.js'
 
 export class Loger{
 
