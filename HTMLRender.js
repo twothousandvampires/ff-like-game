@@ -1,6 +1,7 @@
 import {Inventory} from "./inventory.js";
 import {Game} from "./main.js";
 import { SkillTree } from "./skilltree.js";
+import {Loger} from "./loger";
 
 export class HTMLRender{
 
@@ -505,10 +506,16 @@ export class HTMLRender{
 	static showDiscription(item, e){
 		let disc = document.createElement('div')
 		disc.id = 'disc';
-		disc.style.top = e.pageY + 'px';
-		disc.style.left = e.pageX + 'px';
+		disc.style.top = e.pageY - 20 +  'px';
+		disc.style.left = e.pageX + 20 + 'px';
 		disc.innerHTML = item.getTooltip()
-		let parrent = document.getElementById('inventory_container')
+		let parrent
+		if(item.active_type){
+			parrent = document.getElementById('skill_container')
+		}
+		else {
+			parrent = document.getElementById('inventory_container')
+		}
 		parrent.appendChild(disc)
 	}
 
@@ -529,27 +536,136 @@ export class HTMLRender{
 		skill_container.id = 'skill_container';
 
 		let menu = HTMLRender.createSkillMenu(player);
-
-		let main_page = HTMLRender.createSkillPage(SkillTree.page)
+		let skill_panel = HTMLRender.createSkillPanel(player)
+		let main_page = HTMLRender.createSkillPage(SkillTree.page, player)
 
 		skill_container.appendChild(menu)
 		skill_container.appendChild(main_page)
+		skill_container.appendChild(skill_panel)
 		document.getElementById('body').appendChild(skill_container)
 	}
 
-	static createSkillPage(page){
+	static createChoosePanel(player, e, num){
+		let to_delete = document.getElementById('choose_panel')
+		if(to_delete){
+			to_delete.parentNode.removeChild(to_delete)
+		}
+		let disc = document.createElement('div')
+		disc.style.top = e.pageY - 80 + 'px';
+		disc.style.left = e.pageX + 30 +  'px';
+		disc.id = 'choose_panel'
+
+		for (let i = 0; i < SkillTree.trees.length; i++){
+			for( let j = 0; j < SkillTree.trees[i].length; j ++){
+				if(SkillTree.trees[i][j].level > 0 && SkillTree.trees[i][j].active_type !== 'passive'){
+					let skill = SkillTree.trees[i][j]
+					let item = document.createElement('div');
+
+					let img = document.createElement('img')
+					img.src = skill.image_path
+					item.appendChild(img)
+					disc.appendChild(item)
+
+					item.addEventListener('click', (e) =>{
+						player.skill_panel[num] = skill
+						HTMLRender.drawSkillTree(player)
+					})
+				}
+			}
+		}
+
+
+
+		let parrent = document.getElementById('skill_container')
+		parrent.appendChild(disc)
+	}
+
+	static createSkillPanel(player){
 		let container = document.createElement('div')
+		container.id = 'skill_panel'
+		for(let i = 0; i < player.skill_panel.length; i++){
+			let item = document.createElement('div')
+			item.id = 'skill_panel_item'
+
+			item.addEventListener('mouseover', (e)=>{
+				HTMLRender.showDiscription(player.skill_panel[i], e)
+			})
+			item.addEventListener('mouseout', (e)=>{
+				HTMLRender.closeDiscription(player.skill_panel[i], e)
+			})
+
+			item.addEventListener('click', (e) =>{
+				if(!player.skill_panel[i].active_type){
+					HTMLRender.createChoosePanel(player,e,i)
+				}
+				else {
+					player.skill_panel[i] = {}
+					HTMLRender.drawSkillTree(player)
+				}
+			})
+
+			if(player.skill_panel[i].active_type){
+				let img = document.createElement('img')
+				img.src = player.skill_panel[i].image_path
+				item.appendChild(img)
+			}
+
+			container.appendChild(item)
+		}
+		return container
+	}
+
+	static createSkillPage(page, player){
+
+		let container = document.createElement('div')
+		container.id = 'skill_page'
+		container.style.backgroundImage = `url(${SkillTree.getBGimage(page)})`;
 
 		for (let i = 0; i < SkillTree.trees[page].length; i ++ ){
 			let skill = SkillTree.trees[page][i]
 			let elem = document.createElement('div')
+			elem.id = 'skill_on_page'
 
 			let img = document.createElement('img')
 			img.src = skill.image_path
+			img.style.width = 50 + 'px'
+			img.style.height = 50 + 'px'
 			elem.appendChild(img)
 
+			elem.style.top = skill.y + 'px'
+			elem.style.left = skill.x + 'px'
 			let name = document.createElement('p')
+			name.style.color = 'white'
 			name.innerText = skill.name
+
+			let level = document.createElement('p')
+			level.style.color = 'gold'
+			level.innerText  = skill.level
+
+			elem.appendChild(level)
+
+			elem.addEventListener('click', (e)=>{
+				console.log(SkillTree.trees[0])
+				if(player.skill_point > 0){
+					e.preventDefault()
+					if(skill.avalaible(player)){
+						player.skill_point --
+						skill.levelUp(player)
+						Loger.addLog(`<p>${skill.name} now level ${skill.level}</p>`)
+						HTMLRender.drawSkillTree(player)
+					}
+					else {
+						Loger.addLog(`<p>not available!</p>`)
+					}
+				}
+			})
+
+			elem.addEventListener('mouseover', (e)=>{
+				HTMLRender.showDiscription(skill, e)
+			})
+			elem.addEventListener('mouseout', (e)=>{
+				HTMLRender.closeDiscription(skill, e)
+			})
 
 			elem.appendChild(name)
 			container.appendChild(elem)
@@ -560,7 +676,7 @@ export class HTMLRender{
 
 	static createSkillMenu(player){
 		let container = document.createElement('div')
-
+		container.id = 'skill_menu'
 		for ( let i = 0; i < SkillTree.pages.length; i++ ){
 			let elem = document.createElement('div')
 			elem.innerText = SkillTree.pages[i]

@@ -1,3 +1,5 @@
+import {SkillTree} from "./skilltree";
+
 export class Functions{
 
 	static getRandomInt(max, min){
@@ -46,4 +48,5 @@ export class Functions{
 			elem.appendChild(args[i])
 		}
 	}
+
 }

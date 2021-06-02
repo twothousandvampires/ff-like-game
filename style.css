@@ -167,12 +167,13 @@
     background-size: cover;
     width: 700px;
     height: 700px;
-    position: fixed;
+    position: relative;
     top :0px;
     background-color: aqua;
 }
 
 #log{
+    width: 300px;
     font-size: 14px;
     overflow-y: scroll;
     max-height: 700px;
@@ -185,13 +186,19 @@
 }
 
 #skill_panel{
+    top: 650px;
+    left: 300px;
+    position: absolute;
+    background-color: aquamarine;
     display: flex;
     flex-direction: row;
 }
 
 #skill_page{
     width: 100%;
-    height: 95%;
+    height: 100%;
+    background-image: none;
+    background-size: cover;
 }
 
 #tawern_menu{
@@ -284,4 +291,26 @@
 .atr_cont p {
     margin-right: 10px;
     font-weight: bold;
+}
+#skill_panel_item{
+    background-color: brown;
+    width: 50px;
+    height: 50px;
+}
+#skill_menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+#choose_panel{
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+}
+#skill_on_page{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

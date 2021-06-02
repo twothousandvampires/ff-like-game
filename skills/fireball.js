@@ -1,32 +1,34 @@
 import { Loger } from "../loger.js"
 import {Enemy} from "../scripts/enemy/enemy.js";
+import {Functions} from "../functions";
 
 
 export class Fireball{
 
-	constructor(){
-
+	constructor() {
+		this.x = 150
+		this.y = 500
 		this.ignite_power = 1
 		this.ignite_chance = 10
 		this.name = 'fire ball'
 		this.level = 0
-
+		this.image_path =  '/skill_image/fire_ball.png'
 		this.fire = true
 		this.elemental = true
-
+		this.active_type = 'active'
 		this.min_damage = 2
 		this.max_damage = 8
 		this.mana_cost = 1
-		this.requirements = {'fire_mastery' : 0, 'level' : 0}
-
-		this.avalaible = function(player){
-			if(player.level >= this.requirements.level && player.fire_mastery >= this.requirements.fire_mastery){
+		this.requirements = {'elemental_mastery': 1, 'level': 0}
+		}
+		avalaible(player){
+			if(player.level >= this.requirements.level && player.elemental_mastery >= this.requirements.elemental_mastery){
 				return true
 			}
 			return false
 		}
 
-		this.tooltip = function(){
+		getTooltip(){
 			let tooltip = ``
 			if(this.level === 0){
 				tooltip += `<p>${this.name}</p><p>deal ${this.min_damage} - ${this.max_damage} fire damage</p>`
@@ -38,12 +40,11 @@ export class Fireball{
 			if(this.ignite_chance != 0 ){
 				tooltip += `<p>ignite chance : ${this.ignite_chance}</p>`
 			}
+			tooltip += `<p>requirements : level - ${this.requirements.level}, elemental mastery - ${this.requirements.elemental_mastery}<p>`
 			return tooltip
 		}
 
-		this.image_path =  '/skill_image/fire_ball.png'
-
-		this.can = function(target){
+		can(target){
 			if(target instanceof Enemy){
 				return true
 			}
@@ -52,11 +53,11 @@ export class Fireball{
 			}
 		}
 
-		this.get_damage = function(){
+		getDamage(){
 			return Math.floor(Math.random() * (this.max_damage - this.min_damage) + this.min_damage)
 		}
 
-		this.act = function (player, enemy, stack){
+		act(player, enemy, stack){
 			let d = this.get_damage();
 			d = d - d * (enemy.fire_res/100)
 			Loger.addLog(`${this.name} deal ${d}`)
@@ -70,8 +71,9 @@ export class Fireball{
 				})
 				Loger.addLog(`<p>you ${this.name} ignited ${enemy.name}</p>`)
 			}
-		},
-		this.level_up = function(){
+		}
+
+		levelUp(){
 			if(this.level === 0){
 				this.level ++;
 			}
@@ -80,8 +82,15 @@ export class Fireball{
 				this.min_damage += 2
 				this.max_damage += 2
 			}
-
 		}
-
-	}
+		levelDown(){
+			if(this.level > 1){
+				this.level --;
+				this.min_damage -= 2
+				this.max_damage -= 2
+			}
+			else {
+				this.level --;
+			}
+		}
 }

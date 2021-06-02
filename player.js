@@ -13,7 +13,6 @@ export class Player{
 
         this.quest = [];
         this.ignite_power = 1
-        
         this.evade = 5
         this.block = 0
         this.critical_chance = 5
@@ -22,8 +21,9 @@ export class Player{
         this.spell_ll = 0
 
         this.world = world
-        this.skill_panel = [{},{},{}];
-        this.skill_point = 0
+        this.skills = []
+        this.skill_panel = [{},{},{}]
+        this.skill_point = 24
         this.skill_page = 'elemental'
         this.skill_tree_open = false
         this.gold = 10;
@@ -46,6 +46,12 @@ export class Player{
         this.level = 0
         this.exp_for_level = 10
         this.exp = 0
+
+        this.add_elemental_damage = 0
+        this.add_chance_to_freeze = 0
+        this.add_chance_to_ignite = 0
+        this.add_chance_to_shock = 0
+        this.elemental_mastery = 0
 
         this.min_damage = 1
         this.max_damage = 3

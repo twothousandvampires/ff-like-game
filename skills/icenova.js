@@ -7,7 +7,8 @@ export class Icenova{
 		this.chance_to_freeze = 20
 		this.name = 'ice nova'
 		this.level = 0
-
+		this.x = 350
+		this.y = 500
 		this.cold = true
 		this.elemental = true
 
@@ -16,7 +17,7 @@ export class Icenova{
 		this.mana_cost = 2
 		this.requirements = {'level' : 0}
 		this.image_path = '/skill_image/frost_circle.png'
-
+		this.active_type = 'active'
 	}
 
 	avalaible(player){
@@ -58,7 +59,7 @@ export class Icenova{
 			}
 		}
 	}
-	level_up(){
+	levelUp(){
 		if(this.level === 0){
 			this.level ++;
 		}
@@ -68,7 +69,7 @@ export class Icenova{
 			this.max_damage += 1
 		}
 	}
-	tooltip(){
+	getTooltip(){
 		let tooltip = ``
 		if(this.level === 0){
 			tooltip += `<p>${this.name}</p><p>deal ${this.min_damage} - ${this.max_damage} cold damage</p>`
