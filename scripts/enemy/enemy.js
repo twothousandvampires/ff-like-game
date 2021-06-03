@@ -178,7 +178,7 @@ export class Enemy{
             Loger.addLog(`<p>CRITICAL!</p>`)
         }
         if(less){
-            totalDamage = totalDamage * less
+            totalDamage = Math.ceil(totalDamage * less)
         }
         Loger.damageInfo(totalDamage, player)
         player.takeDamage(totalDamage)

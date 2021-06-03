@@ -1,12 +1,16 @@
 import {Inventory} from "./inventory.js";
 import {Game} from "./main.js";
 import { SkillTree } from "./skilltree.js";
-import {Loger} from "./loger";
+import {Loger} from "./loger.js";
 
 export class HTMLRender{
 
-	static drawInventory(player){
+	static stats_is_open = false
 
+	static drawInventory(player){
+		if(HTMLRender.stats_is_open){
+			HTMLRender.drawAllStats(player)
+		}
 		let toDelete = document.getElementById('inventory_container');
 		if(toDelete){
 			toDelete.parentNode.removeChild(toDelete);
@@ -56,7 +60,7 @@ export class HTMLRender{
 			cell.addEventListener('mouseover', e =>{
 				discTimer = setTimeout(()=>{
 						HTMLRender.showDiscription(Inventory.itemPull[i], e)
-					},1000)
+					},100)
 				})
 				cell.addEventListener('mouseleave', e =>{
 					clearTimeout(discTimer)
@@ -123,6 +127,12 @@ export class HTMLRender{
 			stats_and_equip.appendChild(HTMLRender.createEquip(player))
 			stats_and_equip.appendChild(stats)
 
+			let more = document.createElement('p')
+			more.innerText = 'more...'
+			more.addEventListener('click', (e) =>{
+				HTMLRender.drawAllStats(player)
+			})
+
 			stats.appendChild(hp)
 			stats.appendChild(mana)
 			stats.appendChild(damage)
@@ -136,6 +146,7 @@ export class HTMLRender{
 			stats.appendChild(exp)
 			stats.appendChild(block_evade)
 			stats.appendChild(crit)
+			stats.appendChild(more)
 
 			let trash = document.createElement('div')
 			trash.id = 'trash'
@@ -212,7 +223,7 @@ export class HTMLRender{
 				if(Inventory.equip.head === undefined){
 					Inventory.clicked_item.equip(player)
 
-					InventoryInventory.equip.head = Inventory.clicked_item;
+					Inventory.equip.head = Inventory.clicked_item;
 					Inventory.itemPull.splice(Inventory.clicked_item.num,1);
 					Inventory.clicked_item = null;
 					HTMLRender.unclick()
@@ -539,6 +550,19 @@ export class HTMLRender{
 		let skill_panel = HTMLRender.createSkillPanel(player)
 		let main_page = HTMLRender.createSkillPage(SkillTree.page, player)
 
+		let exit = document.createElement('p')
+		exit.innerText = `exit`
+
+		exit.addEventListener('click', (e) =>{
+			let to_delete = document.getElementById('skill_container')
+			if(to_delete){
+				to_delete.parentNode.removeChild(to_delete)
+			}
+			SkillTree.is_open = false
+			Game.game = 'world'
+		})
+
+		skill_container.appendChild(exit)
 		skill_container.appendChild(menu)
 		skill_container.appendChild(main_page)
 		skill_container.appendChild(skill_panel)
@@ -688,5 +712,92 @@ export class HTMLRender{
 			container.appendChild(elem)
 		}
 		return container
+	}
+
+	static drawAllStats(player){
+		let to_delete = document.getElementById('all_stats')
+		if(to_delete){
+			to_delete.parentNode.removeChild(to_delete)
+		}
+
+		HTMLRender.stats_is_open = true
+		let container = document.createElement('div')
+		container.id = 'all_stats'
+
+		let hp = document.createElement('p')
+		let damage = document.createElement('p')
+		let colddamage = document.createElement('p')
+		let firedamage = document.createElement('p')
+		let lightningdamage = document.createElement('p')
+		let light_res = document.createElement('p')
+		let cold_res = document.createElement('p')
+		let fire_res = document.createElement('p')
+		let armour = document.createElement('p')
+		let mana = document.createElement('p')
+		let exp = document.createElement('p')
+		let block_evade = document.createElement('p')
+		let crit = document.createElement('p')
+
+		let mellell = document.createElement('p')
+		let spellll = document.createElement('p')
+		let increse_elem_dmg = document.createElement('p')
+		let increse_fire_dmg = document.createElement('p')
+		let increse_cold_dmg = document.createElement('p')
+		let increse_light_dmg = document.createElement('p')
+
+		hp.innerText = 'hp ' + player.current_hp + "/" + player.max_hp
+		damage.innerText = 'damage -' + player.min_damage + " - " + player.max_damage
+		colddamage.innerText = 'cold damage : ' + player.min_cold_damage + ' - ' + player.max_cold_damage
+		firedamage.innerText = 'fire damage : ' + player.min_fire_damage + ' - ' + player.max_fire_damage
+		lightningdamage.innerText = 'lightning damage : ' + player.min_light_damage + ' - ' + player.max_light_damage
+		light_res.innerText = 'lightning res : ' + player.light_res
+		cold_res.innerText = 'cold res : ' + player.cold_res
+		fire_res.innerText = 'fire res : ' + player.fire_res
+		armour.innerText = 'armour : ' + player.armour
+		mana.innerText = 'mp : ' + player.current_mana + "/" + player.max_mana
+		exp.innerText = 'exp : ' + player.exp + " / " + player.exp_for_level
+		block_evade.innerText = `block : ${player.block} / evade : ${player.evade}`
+		crit.innerText = `crit chance : ${player.critical_chance} / crit multi : ${player.crirical_multi * 100}`
+
+		mellell.innerText = `melle life leach : ${player.melle_ll}`
+		spellll.innerText = `spell life leach : ${player.spell_ll}`
+		increse_elem_dmg.innerText = `increase elemental damage : ${player.add_elemental_damage}`
+		increse_fire_dmg.innerText = `increase fire damage : ${player.add_fire_damage}`
+		increse_cold_dmg.innerText = `increase cold damage : ${player.add_cold_damage}`
+		increse_light_dmg.innerText = `increase light damage : ${player.add_light_damage}`
+
+		let stats = document.createElement('div')
+
+		stats.appendChild(hp)
+		stats.appendChild(mana)
+		stats.appendChild(damage)
+		stats.appendChild(colddamage)
+		stats.appendChild(firedamage)
+		stats.appendChild(lightningdamage)
+		stats.appendChild(light_res)
+		stats.appendChild(cold_res)
+		stats.appendChild(fire_res)
+		stats.appendChild(armour)
+		stats.appendChild(exp)
+		stats.appendChild(block_evade)
+		stats.appendChild(crit)
+		stats.appendChild(mellell)
+		stats.appendChild(spellll)
+		stats.appendChild(increse_elem_dmg)
+		stats.appendChild(increse_fire_dmg)
+		stats.appendChild(increse_cold_dmg)
+		stats.appendChild(increse_light_dmg)
+
+
+		let exit = document.createElement('p')
+		exit.innerText = 'close'
+		exit.addEventListener('click', (e)=>{
+			HTMLRender.stats_is_open = false
+			let to_delete = document.getElementById('all_stats')
+			to_delete.parentNode.removeChild(to_delete)
+		})
+		container.appendChild(exit)
+		container.appendChild(stats)
+		document.getElementById('body').appendChild(container)
 	}
 }

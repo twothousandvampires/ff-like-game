@@ -23,7 +23,7 @@ export class Functions{
 	static calcDamage(damage, res){
 		let result = 0;
 		if(res < 0){
-			result = Math.ceil(damage  * (1 * Math.abs(res/100)))
+			result = Math.ceil(damage  * (1 + Math.abs(res/100)))
 		}
 		else{
 			result = Math.ceil(damage - damage * (res/100))

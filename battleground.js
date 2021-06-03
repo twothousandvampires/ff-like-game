@@ -125,7 +125,7 @@ export class Battleground{
                         }
                     }
                     else if(Math.abs(Battleground.player.battlePos.x - clickResult.battlePos.x) <= 1 && Math.abs(Battleground.player.battlePos.y - clickResult.battlePos.y) <= 1){
-                        Battleground.player.doDamage(clickResult, Battleground.enemyStack)
+                        Battleground.player.doMelleHit(clickResult, Battleground.enemyStack)
                         Battleground.turn = `enemy`
                     }
 
@@ -156,7 +156,7 @@ export class Battleground{
 
         static enemyTurn(){
             function doAct(i){
-                setTimeout(() => {  Battleground.enemyStack.enemy[i].act(Battleground.player)  },1500 * (i+1))
+                setTimeout(() => {  Battleground.enemyStack.enemy[i].act(Battleground.player)  },200 * (i+1))
             }
 
             for (let i = 0 ; i <= Battleground.enemyStack.enemy.length; i++){
@@ -165,7 +165,7 @@ export class Battleground{
             Battleground.turn = 'await';
             setTimeout(()=>{
                 Battleground.turn = 'player'
-            }, Battleground.enemyStack.enemy.length * 1500)
+            }, Battleground.enemyStack.enemy.length * 500)
 
         }
 

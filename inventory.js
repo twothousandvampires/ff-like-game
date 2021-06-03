@@ -7,7 +7,9 @@ export class Inventory{
     static clicked_item = undefined;
 
     static itemPull = [
-        ItemCreator.createRandomWeapon()
+        ItemCreator.createRandomItem(),
+        ItemCreator.createRandomItem(),
+        ItemCreator.createRandomItem()
     ]
 
     static inventory_is_open = false

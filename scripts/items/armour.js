@@ -1,7 +1,18 @@
+import {EnchantSystem} from "../../enchant_system.js";
+
 export class Armour{
 
     constructor(name, enchanted) {
         this.create(name, enchanted)
+        this.enchants = []
+        if(enchanted){
+            EnchantSystem.enchant(this, enchanted)
+        }
+        else {
+            if(Math.random() < 0.75){
+                EnchantSystem.enchant(this, ['all', 1])
+            }
+        }
     }
 
     create(name, enchanted){
@@ -18,7 +29,6 @@ export class Armour{
                 break;
             case 'wood_shield':
                 this.armour = 2
-                this.add_block = true
                 this.add_block_value = 10
                 this.sell = 3
                 this.buy = 5
@@ -31,102 +41,35 @@ export class Armour{
         }
     }
     equip(player) {
-
-        player.armour += this.armour
-
-        if(this.cold_res){
-            player.cold_res += this.cold_res_value
-        }
-        if(this.fire_res){
-            player.fire_res += this.fire_res_value
-        }
-        if(this.light_res){
-            player.light_res += this.light_res_value
-        }
-        if(this.add_armour){
-            player.armour += this.add_armour_value
-        }
-        if(this.cold_damage){
-            player.min_cold_damage += this.min_cold_damage
-            player.max_cold_damage += this.max_cold_damage
-        }
-        if(this.fire_damage){
-            player.min_fire_damage += this.min_fire_damage
-            player.max_fire_damage += this.max_fire_damage
-        }
-        if(this.light_damage){
-            player.min_light_damage += this.min_light_damage
-            player.max_light_damage += this.max_light_damage
-        }
-        if(this.phys_damage){
-            player.min_damage += this.min_phys_damage
-            player.max_damage += this.max_phys_damage
-        }
-        if(this.add_block){
+        if(this.type === 'shield'){
             player.block += this.add_block_value
         }
-        if(this.add_evade){
-            player.evade += this.add_evade_value
+        player.armour += this.armour
+        for(let i = 0; i < this.enchants.length; i ++){
+            this.enchants[i].equip(player)
         }
     }
     unequip(player) {
-
-        player.armour -= this.armour
-
-        if(this.cold_res){
-            player.cold_res -= this.cold_res_value
-        }
-        if(this.fire_res){
-            player.fire_res -= this.fire_res_value
-        }
-        if(this.light_res){
-            player.light_res -= this.light_res_value
-        }
-        if(this.add_armour){
-            player.armour -= this.add_armour_value
-        }
-        if(this.cold_damage){
-            player.min_cold_damage -= this.min_cold_damage
-            player.max_cold_damage -= this.max_cold_damage
-        }
-        if(this.fire_damage){
-            player.min_fire_damage -= this.min_fire_damage
-            player.max_fire_damage -= this.max_fire_damage
-        }
-        if(this.light_damage){
-            player.min_light_damage -= this.min_light_damage
-            player.max_light_damage -= this.max_light_damage
-        }
-        if(this.phys_damage){
-            player.min_damage -= this.min_phys_damage
-            player.max_damage -= this.max_phys_damage
-        }
-        if(this.add_block){
+        if(this.type === 'shield'){
             player.block -= this.add_block_value
         }
-        if(this.add_evade){
-            player.evade -= this.add_evade_value
+        player.armour -= this.armour
+        for(let i = 0; i < this.enchants.length; i ++){
+            this.enchants[i].unequip(player)
         }
     }
     getTooltip(shop){
         let tooltip = ``;
 
         tooltip += `<p>${this.name}</p>`
+        if(this.type === 'shield'){
+            tooltip += `<p>block chance ${this.add_block_value}</p>`
+        }
+        tooltip += `<p>armour ${this.armour}</p>`
 
-        tooltip += `<p>armour ${this.armour}</p>```
-
-        if(this.cold_damage) { tooltip += `<p class ='bluetext'>add ${this.min_cold_damage} - ${this.max_cold_damage} cold damage</p>`}
-        if(this.fire_damage) { tooltip += `<p class ='redtext'>add ${this.min_fire_damage} - ${this.max_fire_damage} fire damage</p>`}
-        if(this.light_damage) { tooltip += `<p class ='goldtext'>add ${this.min_light_damage} - ${this.max_light_damage} lightning damage</p>`}
-        if(this.phys_damage) { tooltip += `<p>add ${this.min_phys_damage} - ${this.max_phys_damage} physical damage</p>`}
-
-        if(this.fire_res) { tooltip += `<p class ='redtext'>add ${this.fire_res_value} fire res</p>`}
-        if(this.light_res) { tooltip += `<p class ='goldtext'>add ${this.light_res_value} lightning res</p>`}
-        if(this.add_armour) { tooltip += `<p class ='goldtext'>add ${this.add_armour_value} armour</p>`}
-        if(this.cold_res) { tooltip += `<p class ='bluetext'>add ${this.cold_res_value} cold res</p>`}
-
-        if(this.add_block) { tooltip += `<p class ='graytext'>add ${this.add_block_value} block chance</p>`}
-        if(this.add_evade) { tooltip += `<p class ='graytext'>add ${this.add_evade_value} evade chance</p>`}
+        for (let i = 0; i < this.enchants.length; i ++ ){
+            tooltip += `<p>${this.enchants[i].tool_tip}</p>`
+        }
 
         if(shop){
             tooltip += `<p>sell : ${this.sell}</p>`

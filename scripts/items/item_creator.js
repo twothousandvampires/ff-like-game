@@ -37,13 +37,13 @@ export class ItemCreator {
     //     return new UsedItem(name)
     // }
     //
-    static createRandomWeapon(){
+    static createRandomWeapon(enchant){
         let name = ItemCreator.weapon_list[Math.floor(Math.random() * ItemCreator.weapon_list.length)]
-        return new Weapon(name)
+        return new Weapon(name, enchant)
     }
-    static createRandomArmour(){
+    static createRandomArmour(enchant){
         let name = ItemCreator.armour_list[Math.floor(Math.random() * ItemCreator.armour_list.length)]
-        return new Armour(name)
+        return new Armour(name, enchant)
     }
     static createRandomJewerly(){
         let name = ItemCreator.jewerly_list[Math.floor(Math.random() * ItemCreator.jewerly_list.length)]
@@ -55,16 +55,20 @@ export class ItemCreator {
     }
 
     static createRandomItem(){
-        let r = Math.floor(Math.random()*4);
+        let r = Math.floor(Math.random()*2);
         switch(r){
             case 0 :
-                ItemCreator.createRandomArmour()
+                return ItemCreator.createRandomArmour()
+                break;
             case 1 :
-                ItemCreator.createRandomWeapon()
+                return ItemCreator.createRandomWeapon()
+                break;
             case 2 :
-                ItemCreator.createRandomPoution()
+                return ItemCreator.createRandomPoution()
+                break;
             case 3 :
-                ItemCreator.createRandomJewerly()
+                return ItemCreator.createRandomJewerly()
+                break;
         }
     }
 }
