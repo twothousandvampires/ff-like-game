@@ -3,44 +3,45 @@ import { Enchant } from "./enchant.js";
 import {Armour} from "./scripts/items/armour.js";
 
 export class EnchantSystem{
-
+	// list of all types
 	static type_ench_list = [
 		'fire',
 		'cold',
 		'light'
 	]
-
+	// list for weapon with weight
 	static weapon_ench_list = {
 		'fire' : [
-			'fire damage',
-			'fire res',
+			['fire res', 100],
+			['fire damage', 500],
 		],
 		'cold' : [
-			'cold damage',
-			'cold res'
+			['cold res', 100],
+			['cold damage', 500],
 		],
 		'light' : [
-			'light damage',
-			'light res'
+			['light res', 100],
+			['light damage', 500],
 		]
 	}
 
 	static armour_ench_list = {
 		'fire' : [
-			'fire res',
+			['fire res', 700],
 		],
 		'cold' : [
-			'cold res'
+			['cold res', 700]
 		],
 		'light' : [
-			'light res'
+			['light res' , 700]
 		]
 	}
 
 	static enchant(item, enchant){
-		console.log(enchant)
-		let count = enchant[1] ? enchant[1] : Math.floor(Math.random() * (7 - 1) + 1)
 
+		let count = enchant[1]
+
+		console.log(count)
 		switch (enchant[0]){
 			case 'all':
 				EnchantSystem.createRandomEnchant(item, count)
@@ -58,7 +59,7 @@ export class EnchantSystem{
 			let ench_type = EnchantSystem.type_ench_list[Math.floor(Math.random() * EnchantSystem.type_ench_list.length)]
 
 			if(item instanceof Weapon){
-				let ench = EnchantSystem.weapon_ench_list[ench_type][Math.floor(Math.random() * EnchantSystem.weapon_ench_list[ench_type].length)]
+				let ench = EnchantSystem.getElemByWeight(EnchantSystem.weapon_ench_list[ench_type])
 				if(item.enchants.some( elem =>  elem.name === ench )){
 					i--
 				}
@@ -89,6 +90,15 @@ export class EnchantSystem{
 			}
 			else {
 				EnchantSystem.createRandomEnchant(item, count )
+			}
+		}
+	}
+
+	static getElemByWeight(arr){
+		let random = Math.floor(Math.random() * (arr[arr.length-1][1] - arr[0][1]) + arr[0][1])
+		for (let i = 0; i < arr.length; i++){
+			if(random <= arr[i][1]){
+				return arr[i][0]
 			}
 		}
 	}

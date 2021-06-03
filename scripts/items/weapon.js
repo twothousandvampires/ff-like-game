@@ -1,16 +1,27 @@
 import {EnchantSystem} from "../../enchant_system.js";
+import {Functions} from "../../functions.js";
 
 export class Weapon{
 
     constructor(name, enchanted) {
+
+        console.log('crea')
         this.create(name)
         this.enchants = []
         if(enchanted){
             EnchantSystem.enchant(this, enchanted)
         }
         else {
-            if(Math.random() < 0.15){
-                EnchantSystem.enchant(this, ['all'])
+            if(Math.random() < 0.95){
+                let arr_of_ench_count = [
+                    [6 , 100],
+                    [5 , 200],
+                    [4, 500],
+                    [3, 1000],
+                    [2, 5000],
+                    [1, 10000]
+                ]
+                EnchantSystem.enchant(this, ['all', EnchantSystem.getElemByWeight(arr_of_ench_count)] )
             }
         }
     }

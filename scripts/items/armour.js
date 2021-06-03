@@ -3,19 +3,28 @@ import {EnchantSystem} from "../../enchant_system.js";
 export class Armour{
 
     constructor(name, enchanted) {
-        this.create(name, enchanted)
+        console.log('armour')
+        this.create(name)
         this.enchants = []
         if(enchanted){
             EnchantSystem.enchant(this, enchanted)
         }
         else {
-            if(Math.random() < 0.75){
-                EnchantSystem.enchant(this, ['all', 1])
+            if(Math.random() < 0.95){
+                let arr_of_ench_count = [
+                    [6 , 100],
+                    [5 , 200],
+                    [4, 500],
+                    [3, 1000],
+                    [2, 5000],
+                    [1, 10000]
+                ]
+                EnchantSystem.enchant(this, ['all', EnchantSystem.getElemByWeight(arr_of_ench_count)])
             }
         }
     }
 
-    create(name, enchanted){
+    create(name){
         switch (name){
             case 'leather_helmet':
                 this.sell = 1

@@ -1,5 +1,5 @@
-import {Functions} from "../functions";
-import {Enemy} from "../scripts/enemy/enemy";
+import {Functions} from "../functions.js";
+import {Enemy} from "../scripts/enemy/enemy.js";
 import {Loger} from "../loger.js";
 
 export class ElementalMastery{

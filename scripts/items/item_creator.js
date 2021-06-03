@@ -54,14 +54,14 @@ export class ItemCreator {
         return new Poution(name)
     }
 
-    static createRandomItem(){
+    static createRandomItem(enchanted = false){
         let r = Math.floor(Math.random()*2);
         switch(r){
             case 0 :
-                return ItemCreator.createRandomArmour()
+                return ItemCreator.createRandomArmour(enchanted)
                 break;
             case 1 :
-                return ItemCreator.createRandomWeapon()
+                return ItemCreator.createRandomWeapon(enchanted)
                 break;
             case 2 :
                 return ItemCreator.createRandomPoution()

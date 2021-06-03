@@ -26,7 +26,6 @@ export class EnemyStack{
         if(q_item){
             this.quset_item = quset_item
         }
-        console.log(this)
     }
 
     parseStack(stack){

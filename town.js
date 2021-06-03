@@ -323,7 +323,6 @@ export class Town{
 
 
     fillShop(){
-        console.log(ItemCreator)
         let count = Math.floor(Math.random() * (10 - 1) + 1);
 
         for(let i = 0; i < count; i++){

@@ -7,6 +7,9 @@ import { Inventory } from './inventory.js'
 import { Craft } from './craft.js'
 import { Intro } from './intro.js'
 import {SkillTree} from "./skilltree.js"
+import {Functions} from "./functions.js";
+
+
 
 export class Game{
 

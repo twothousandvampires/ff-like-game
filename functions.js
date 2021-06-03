@@ -1,4 +1,4 @@
-import {SkillTree} from "./skilltree";
+import {SkillTree} from "./skilltree.js";
 
 export class Functions{
 
@@ -49,4 +49,9 @@ export class Functions{
 		}
 	}
 
+
+
+	static init(){
+
+	}
 }
