@@ -85,7 +85,9 @@ export class Battleground{
             if(Game.game == 'battle'){
                 switch(Battleground.turn){
                     case 'player':
-                        Battleground.playerTurn();
+                        if(Battleground.player_turn_delay > = 2000){
+                            Battleground.playerTurn();
+                        }
                         break;
                     case 'enemy' :
                         Battleground.enemyTurn();
@@ -97,61 +99,60 @@ export class Battleground{
         }
 
         static playerTurn(){
+            // if spell is instantly
+            if(Battleground.clicked_spell){
+                if(Battleground.clicked_spell.can()){
+                    Battleground.clicked_spell.act(Battleground.player, false ,Battleground.enemyStack)
+                    Battleground.turn = 'enemy'
+                    Battleground.clicked_spell = undefined
+                }
+            }
 
-            if(Battleground.player_turn_delay >= 2000){
+            let clickResult = Battleground.clickChecker(Battleground.mouseClick);
+
+            if( Battleground.clicked_spell ){
+                if( clickResult instanceof Enemy ){
+                    if(Battleground.clicked_spell.can(clickResult)){
+                        if(Battleground.player.current_mana >= Battleground.clicked_spell.mana_cost){
+                            Battleground.clicked_spell.act(Battleground.player, clickResult, Battleground.enemyStack)
+                            Battleground.clicked_spell = undefined
+                            Battleground.turn = 'enemy'
+                            return
+                        }
+                        else{
+                            Loger.addLog(`<p class = 'redtext'>not enough mana<p>`)
+                            Battleground.clicked_spell = undefined
+                            Battleground.player_turn_delay = 0
+                        }
+                    }
+                }
+                else if(Math.abs(Battleground.player.battlePos.x - clickResult.battlePos.x) <= 1 && Math.abs(Battleground.player.battlePos.y - clickResult.battlePos.y) <= 1){
+                    Battleground.player.doMelleHit(clickResult, Battleground.enemyStack)
+                    Battleground.turn = `enemy`
+                }
+
+            }
+            else if(typeof clickResult === 'object'){
                 if(Battleground.clicked_spell){
-                    if(Battleground.clicked_spell.can()){
-                        Battleground.clicked_spell.act(Battleground.player, false ,Battleground.enemyStack)
-                        Battleground.turn = 'enemy'
+                    if(Battleground.clicked_spell.can(clickResult)){
+                        Battleground.player_turn_delay = 0
+                    }
+                    else{
+                        Loger.addLog(`<p class = 'redtext'>wrong target<p>`)
+                        Battleground.player_turn_delay = 0
                         Battleground.clicked_spell = undefined
                     }
                 }
-                let clickResult = Battleground.clickChecker(Battleground.mouseClick);
-
-                if(clickResult instanceof Enemy){
-                    if(Battleground.clicked_spell){
-
-                        if(Battleground.clicked_spell.can(clickResult)){
-                            if(Battleground.player.current_mana >= Battleground.clicked_spell.mana_cost){
-                                Battleground.clicked_spell.act(Battleground.player, clickResult, Battleground.enemyStack)
-                                Battleground.clicked_spell = undefined
-                                Battleground.turn = 'enemy'
-                                return
-                            }
-                            else{
-                                Loger.addLog(`<p class = 'redtext'>not enough mana<p>`)
-                                Battleground.clicked_spell = undefined
-                                Battleground.player_turn_delay = 0
-                            }
-                        }
-                    }
-                    else if(Math.abs(Battleground.player.battlePos.x - clickResult.battlePos.x) <= 1 && Math.abs(Battleground.player.battlePos.y - clickResult.battlePos.y) <= 1){
-                        Battleground.player.doMelleHit(clickResult, Battleground.enemyStack)
-                        Battleground.turn = `enemy`
+                else if(Math.abs(Battleground.player.battlePos.x - clickResult.x) <= 1 && Math.abs(Battleground.player.battlePos.y - clickResult.y) <= 1){
+                    if(Battleground.plan[clickResult.y][clickResult.x].type !=2 ){
+                        Battleground.player.battlePos.x = clickResult.x;
+                        Battleground.player.battlePos.y = clickResult.y;
+                        Battleground.turn = 'enemy'
                     }
 
-                }
-                else if(typeof clickResult === 'object'){
-                    if(Battleground.clicked_spell){
-                        if(Battleground.clicked_spell.can(clickResult)){
-                            Battleground.player_turn_delay = 0
-                        }
-                        else{
-                            Loger.addLog(`<p class = 'redtext'>wrong target<p>`)
-                            Battleground.player_turn_delay = 0
-                            Battleground.clicked_spell = undefined
-                        }
-                    }
-                    else if(Math.abs(Battleground.player.battlePos.x - clickResult.x) <= 1 && Math.abs(Battleground.player.battlePos.y - clickResult.y) <= 1){
-                        if(Battleground.plan[clickResult.y][clickResult.x].type !=2 ){
-                            Battleground.player.battlePos.x = clickResult.x;
-                            Battleground.player.battlePos.y = clickResult.y;
-                            Battleground.turn = 'enemy'
-                        }
-
-                    }
                 }
             }
+
             Battleground.player_turn_delay +=20
         }
 
