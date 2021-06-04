@@ -1,13 +1,15 @@
 import {Weapon} from "./scripts/items/weapon.js";
 import { Enchant } from "./enchant.js";
 import {Armour} from "./scripts/items/armour.js";
+import {jewelry} from "./scripts/items/jewelry.js";
 
 export class EnchantSystem{
 	// list of all types
 	static type_ench_list = [
 		'fire',
 		'cold',
-		'light'
+		'light',
+		'life'
 	]
 	// list for weapon with weight
 	static weapon_ench_list = {
@@ -22,6 +24,9 @@ export class EnchantSystem{
 		'light' : [
 			['light res', 100],
 			['light damage', 500],
+		],
+		'life' : [
+			['life leech', 100]
 		]
 	}
 
@@ -34,6 +39,25 @@ export class EnchantSystem{
 		],
 		'light' : [
 			['light res' , 700]
+		],
+		'life' : [
+			['add life', 100]
+		]
+	}
+
+	static jewelry_ench_list = {
+		'fire' : [
+			['increase ignite multi', 300],
+			['increase fire damage', 300],
+		],
+		'cold' : [
+			['increase cold damage', 300]
+		],
+		'light' : [
+			['increase cold damage', 300]
+		],
+		'life' : [
+			['add life', 100]
 		]
 	}
 
@@ -41,7 +65,6 @@ export class EnchantSystem{
 
 		let count = enchant[1]
 
-		console.log(count)
 		switch (enchant[0]){
 			case 'all':
 				EnchantSystem.createRandomEnchant(item, count)
@@ -56,26 +79,20 @@ export class EnchantSystem{
 
 	static createRandomEnchant(item, count){
 		for (let i = 0; i < count; i ++){
+
 			let ench_type = EnchantSystem.type_ench_list[Math.floor(Math.random() * EnchantSystem.type_ench_list.length)]
+			let ench;
+			let type;
 
-			if(item instanceof Weapon){
-				let ench = EnchantSystem.getElemByWeight(EnchantSystem.weapon_ench_list[ench_type])
-				if(item.enchants.some( elem =>  elem.name === ench )){
-					i--
-				}
-				else {
-					item.enchants.push(new Enchant(ench, 'weapon'))
-				}
+			if(item instanceof Weapon) { ench = EnchantSystem.getElemByWeight(EnchantSystem.weapon_ench_list[ench_type]) ; type = 'weapon' }
+			else if(item instanceof Armour) { ench = EnchantSystem.getElemByWeight(EnchantSystem.armour_ench_list[ench_type]) ; type = 'armour' }
+			else if(item instanceof jewelry) { ench = EnchantSystem.getElemByWeight(EnchantSystem.jewelry_ench_list[ench_type]) ; type = 'jewelry' }
+
+			if(item.enchants.some( elem =>  elem.name === ench )){
+				i--
 			}
-
-			else if(item instanceof Armour){
-				let ench = EnchantSystem.armour_ench_list[ench_type][Math.floor(Math.random() * EnchantSystem.armour_ench_list[ench_type].length)]
-				if(item.enchants.some( elem =>  elem.name === ench )){
-					i--
-				}
-				else {
-					item.enchants.push(new Enchant(ench, 'armour'))
-				}
+			else{
+				item.enchants.push(new Enchant(ench, type))
 			}
 		}
 	}

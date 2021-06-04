@@ -1,7 +1,7 @@
 import { Loger } from "../loger.js"
 import {Enemy} from "../scripts/enemy/enemy.js";
 import {Functions} from "../functions.js";
-
+import {Ignite} from "../scripts/Aliment/Ignite.js";
 
 export class Fireball{
 
@@ -9,7 +9,7 @@ export class Fireball{
 		this.x = 150
 		this.y = 500
 		this.ignite_power = 1
-		this.ignite_chance = 10
+		this.ignite_chance = 100
 		this.name = 'fire ball'
 		this.level = 0
 		this.image_path =  '/skill_image/fire_ball.png'
@@ -45,12 +45,7 @@ export class Fireball{
 		}
 
 		can(target){
-			if(target instanceof Enemy){
-				return true
-			}
-			else{
-				return false
-			}
+			return target instanceof Enemy;
 		}
 
 		getDamage(){
@@ -58,17 +53,18 @@ export class Fireball{
 		}
 
 		act(player, enemy, stack){
-			let d = this.get_damage();
-			d = d - d * (enemy.fire_res/100)
-			Loger.addLog(`${this.name} deal ${d}`)
+			let d = this.getDamage();
+			d = Functions.calcDamage(d, enemy.fire_res)
+
+			Loger.addLog(`<p>${this.name} deal ${d}<p>`)
 			enemy.takeDamage(d, player, stack);
 			Loger.damageInfo(d, enemy)
-			if(Math.random() * 100 < this.ignite_chance){
-				enemy.ailment.push({
-					'power' : Math.ceil((d/4) * (this.ignite_power + player.ignite_power)),
-					'type' : 'ignite',
-					'duration' : 4
-				})
+
+			if(Math.random() * 100 < this.ignite_chance + player.add_chance_to_ignite){
+				let tick = Math.ceil(d/4 * player.ignite_multi/100)
+				enemy.ailments.push(
+					new Ignite(tick, player.ignite_duration)
+				)
 				Loger.addLog(`<p>you ${this.name} ignited ${enemy.name}</p>`)
 			}
 		}

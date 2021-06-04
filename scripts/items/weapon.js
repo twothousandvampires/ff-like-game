@@ -5,7 +5,6 @@ export class Weapon{
 
     constructor(name, enchanted) {
 
-        console.log('crea')
         this.create(name)
         this.enchants = []
         if(enchanted){

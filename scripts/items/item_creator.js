@@ -1,6 +1,6 @@
 import {Weapon} from "./weapon.js";
 import {Armour} from "./armour.js";
-import {Jewerly} from "./jewerly.js";
+import {jewelry} from "./jewelry.js";
 import {Poution} from "./poution.js";
 
 export class ItemCreator {
@@ -16,27 +16,10 @@ export class ItemCreator {
         static poution_list = [
             'small_heal_potion'
         ]
-        static jewerly_list= [
+        static jewelry_list= [
             'iron_ring'
         ]
 
-
-    // createWeapon(name , enchanted){
-    //     return new Item_creator(name)
-    // }
-    //
-    // createArmour(name, enchanted){
-    //     return new Item_creator(name)
-    // }
-    //
-    // createJewerly(name, enchanted){
-    //     return new Item_creator(name)
-    // }
-    //
-    // createUsed(name){
-    //     return new UsedItem(name)
-    // }
-    //
     static createRandomWeapon(enchant){
         let name = ItemCreator.weapon_list[Math.floor(Math.random() * ItemCreator.weapon_list.length)]
         return new Weapon(name, enchant)
@@ -45,9 +28,9 @@ export class ItemCreator {
         let name = ItemCreator.armour_list[Math.floor(Math.random() * ItemCreator.armour_list.length)]
         return new Armour(name, enchant)
     }
-    static createRandomJewerly(){
-        let name = ItemCreator.jewerly_list[Math.floor(Math.random() * ItemCreator.jewerly_list.length)]
-        return new Jewerly(name)
+    static createRandomjewelry(enchant){
+        let name = ItemCreator.jewelry_list[Math.floor(Math.random() * ItemCreator.jewelry_list.length)]
+        return new jewelry(name, enchant)
     }
     static createRandomPoution(){
         let name = ItemCreator.poution_list[Math.floor(Math.random() * ItemCreator.poution_list.length)]
@@ -55,7 +38,7 @@ export class ItemCreator {
     }
 
     static createRandomItem(enchanted = false){
-        let r = Math.floor(Math.random()*2);
+        let r = Math.floor(Math.random()*3);
         switch(r){
             case 0 :
                 return ItemCreator.createRandomArmour(enchanted)
@@ -64,10 +47,10 @@ export class ItemCreator {
                 return ItemCreator.createRandomWeapon(enchanted)
                 break;
             case 2 :
-                return ItemCreator.createRandomPoution()
+                return ItemCreator.createRandomjewelry(enchanted)
                 break;
             case 3 :
-                return ItemCreator.createRandomJewerly()
+                return ItemCreator.createRandomPoution(enchanted)
                 break;
         }
     }

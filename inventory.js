@@ -9,6 +9,9 @@ export class Inventory{
     static itemPull = [
         ItemCreator.createRandomItem(),
         ItemCreator.createRandomItem(),
+        ItemCreator.createRandomItem(),
+        ItemCreator.createRandomItem(),
+        ItemCreator.createRandomItem(),
         ItemCreator.createRandomItem()
     ]
 

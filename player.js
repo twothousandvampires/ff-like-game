@@ -3,6 +3,7 @@ import {SkillTree} from './skilltree.js'
 import { Functions} from "./functions.js";
 import {Game} from "./main.js";
 export class Player{
+
     constructor(world){
         this.strength = 2
         this.stamina = 2
@@ -49,15 +50,19 @@ export class Player{
         this.exp_for_level = 10
         this.exp = 0
 
-        this.ignite_multy = 1
-        this.shock_multy = 1
-        this.add_elemental_damage = 100
-        this.add_fire_damage = 0
-        this.add_cold_damage = 0
-        this.add_light_damage = 0
+        this.ignite_multi = 100
+        this.shock_multi = 100
+        this.add_elemental_damage = 0
+        this.incr_fire_damage = 0
+        this.incr_cold_damage = 0
+        this.incr_light_damage = 0
+
+        this.freeze_duration = 2
+        this.ignite_duration = 4
         this.add_chance_to_freeze = 0
         this.add_chance_to_ignite = 0
         this.add_chance_to_shock = 0
+
         this.elemental_mastery = 0
 
         this.image = new Image()
@@ -165,15 +170,15 @@ export class Player{
         console.log('phys' + totalPhysDamage)
 
         let totalColdDamage = Functions.calcDamage(Math.floor(Math.random()  * (this.max_cold_damage - this.min_cold_damage+1) + this.min_cold_damage), enemy.cold_res);
-        totalColdDamage = Math.round(totalColdDamage * (1 + (this.add_elemental_damage/100 + this.add_cold_damage/100)))
+        totalColdDamage = Math.round(totalColdDamage * (1 + (this.add_elemental_damage/100 + this.incr_cold_damage/100)))
         console.log('cold' + totalColdDamage)
 
         let totalFireDamage = Functions.calcDamage(Math.floor(Math.random()  * (this.max_fire_damage - this.min_fire_damage+1) + this.min_fire_damage), enemy.fire_res);
-        totalFireDamage = Math.round(totalFireDamage * (1 + (this.add_elemental_damage/100 + this.add_fire_damage/100)))
+        totalFireDamage = Math.round(totalFireDamage * (1 + (this.add_elemental_damage/100 + this.incr_fire_damage/100)))
         console.log('fire' + totalFireDamage)
 
         let totalLightDamage = Functions.calcDamage(Math.floor(Math.random()  * (this.max_light_damage - this.min_light_damage+1) + this.min_light_damage), enemy.light_res);
-        totalLightDamage = Math.round(totalLightDamage * (1 + (this.add_elemental_damage/100 + + this.add_light_damage/100)))
+        totalLightDamage = Math.round(totalLightDamage * (1 + (this.add_elemental_damage/100 + + this.incr_light_damage/100)))
         console.log('light' + totalLightDamage)
 
         let totalDamage = totalColdDamage + totalPhysDamage + totalFireDamage + totalLightDamage

@@ -744,6 +744,8 @@ export class HTMLRender{
 		let increse_fire_dmg = document.createElement('p')
 		let increse_cold_dmg = document.createElement('p')
 		let increse_light_dmg = document.createElement('p')
+		let ignite_multi = document.createElement('p')
+		let shock_multi = document.createElement('p')
 
 		hp.innerText = 'hp ' + player.current_hp + "/" + player.max_hp
 		damage.innerText = 'damage -' + player.min_damage + " - " + player.max_damage
@@ -762,9 +764,11 @@ export class HTMLRender{
 		mellell.innerText = `melle life leach : ${player.melle_ll}`
 		spellll.innerText = `spell life leach : ${player.spell_ll}`
 		increse_elem_dmg.innerText = `increase elemental damage : ${player.add_elemental_damage}`
-		increse_fire_dmg.innerText = `increase fire damage : ${player.add_fire_damage}`
-		increse_cold_dmg.innerText = `increase cold damage : ${player.add_cold_damage}`
-		increse_light_dmg.innerText = `increase light damage : ${player.add_light_damage}`
+		increse_fire_dmg.innerText = `increase fire damage : ${player.incr_fire_damage}`
+		increse_cold_dmg.innerText = `increase cold damage : ${player.incr_cold_damage}`
+		increse_light_dmg.innerText = `increase light damage : ${player.incr_light_damage}`
+		ignite_multi.innerText = `ignite multi : ${player.ignite_multi } %`
+		shock_multi.innerText = `shock multi : ${player.shock_multi } %`
 
 		let stats = document.createElement('div')
 
@@ -787,6 +791,8 @@ export class HTMLRender{
 		stats.appendChild(increse_fire_dmg)
 		stats.appendChild(increse_cold_dmg)
 		stats.appendChild(increse_light_dmg)
+		stats.appendChild(ignite_multi)
+		stats.appendChild(shock_multi)
 
 
 		let exit = document.createElement('p')

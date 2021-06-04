@@ -11,18 +11,21 @@ export class Loger{
     }
 
     static damageInfo(damage, target){
+        let x_offset = document.getElementById('can').offsetLeft
+        let y_offset = document.getElementById('can').offsetTop
         let body = document.getElementById('body')
-        let ticks = 10;
-        let x =  target.battlePos.x * 100 + 25
-        let y = target.battlePos.y * 100  
+        let ticks = 40;
+        let x =  target.battlePos.x * 100 + 25 + x_offset
+        let y = target.battlePos.y * 100  + y_offset
         let window = document.createElement('div');
-        window.innerHTML = `<p class = '${target instanceof Player ? 'bluetext' : 'redtext'}'>${damage}</p>`
+        window.id = 'damage_text_up'
+        window.innerHTML = `<p class = '${target instanceof Player ? 'bluetext' : 'goldtext'}'>${damage}</p>`
         window.style.position = 'absolute';
         window.style.top = y + 'px';
         window.style.left = x +'px';
         body.appendChild(window)
         let up = setInterval(()=>{         
-            y -= 5;
+            y -= 2;
             window.style.top = y + 'px';
             ticks -= 1;
             if(ticks === 0){
@@ -30,7 +33,7 @@ export class Loger{
                 window.parentNode.removeChild(window)
                 clearInterval(up)
             }
-        },100)
+        },20)
     }
     static clear(){
         Loger.log.innerHTML = ''

@@ -97,33 +97,7 @@ export class Enemy{
 
     check_ailment(player){
         for(let i = 0; i < this.ailments.length; i ++){
-            switch(this.ailment[i].type){
-                case `ignite`:
-                    this.hp -= this.ailment[i].power
-                    Loger.addLog(`<p>ignite deal ${this.ailment[i].power} damage</p>`)
-                    if(this.hp <= 0){
-                        this.die(player, this.stack)
-                    }
-                    this.ailment[i].duration --
-                    if(this.ailment[i].duration === 0){
-                        this.ailment = this.ailment.filter( elem =>{
-                            return elem != this.ailment[i]
-                        })
-                    }
-                    break;
-                case 'freeze':
-                    if(this.ailment[i].duration === 0){
-                        this.freezed = false
-                        this.ailment = this.ailment.filter( elem =>{
-                            return elem != this.ailment[i]
-                        })
-                    }
-                    else{
-                        this.freezed = true
-                        this.ailment[i].duration --
-                    }
-                    break;
-            }
+            this.ailments[i].enemyAct(player, this)
         }
         return this.hp > 0
     }

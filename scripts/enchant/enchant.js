@@ -48,7 +48,7 @@ simple_enchant(){
                 this.defence_enchant()
             }
             break;
-        case 'jewerly':
+        case 'jewelry':
             if(r > 80){
                 this.damage_enchant()
             }

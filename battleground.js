@@ -112,10 +112,11 @@ export class Battleground{
                     if(Battleground.clicked_spell){
 
                         if(Battleground.clicked_spell.can(clickResult)){
-                            if(Battleground.player.current_mana >= Battleground.clicked_spell.cost){
+                            if(Battleground.player.current_mana >= Battleground.clicked_spell.mana_cost){
                                 Battleground.clicked_spell.act(Battleground.player, clickResult, Battleground.enemyStack)
-                                Battleground.turn = 'enemy'
                                 Battleground.clicked_spell = undefined
+                                Battleground.turn = 'enemy'
+                                return
                             }
                             else{
                                 Loger.addLog(`<p class = 'redtext'>not enough mana<p>`)
@@ -156,7 +157,7 @@ export class Battleground{
 
         static enemyTurn(){
             function doAct(i){
-                setTimeout(() => {  Battleground.enemyStack.enemy[i].act(Battleground.player)  },200 * (i+1))
+                setTimeout(() => {  Battleground.enemyStack.enemy[i].act(Battleground.player)  },1500 * (i+1))
             }
 
             for (let i = 0 ; i <= Battleground.enemyStack.enemy.length; i++){
@@ -165,7 +166,7 @@ export class Battleground{
             Battleground.turn = 'await';
             setTimeout(()=>{
                 Battleground.turn = 'player'
-            }, Battleground.enemyStack.enemy.length * 500)
+            }, Battleground.enemyStack.enemy.length * 1500)
 
         }
 

@@ -1,6 +1,6 @@
-import {EnchantSystem} from "../../enchant_system.js";
+import {EnchantSystem} from "../../enchant_system";
 
-export class Armour{
+export class jewelry{
 
     constructor(name, enchanted) {
         this.create(name)
@@ -24,44 +24,24 @@ export class Armour{
     }
 
     create(name){
-        switch (name){
-            case 'leather_helmet':
-                this.sell = 1
+        switch (name) {
+            case 'iron_ring':
+                this.sell = 4
                 this.buy = 2
-                this.type = 'helm'
-                this.discription = 'leather helmet'
-                this.image_path =' item_image/leather_helmet.png'
-                this.name = 'leather helmet';
-                this.armour = 1;
-                this.slot = 'head';
-                break;
-            case 'wood_shield':
-                this.armour = 2
-                this.add_block_value = 10
-                this.sell = 3
-                this.buy = 5
-                this.type = 'shield'
-                this.discription = 'wood shield'
-                this.image_path =' item_image/wood_shield.png'
-                this.name = 'wood shield';
-                this.slot = 'right_hand';
+                this.type = 'ring'
+                this.discription = 'iron ring'
+                this.image_path =' item_image/iron_ring.png'
+                this.name = 'iron ring';
+                this.slot = 'ring';
                 break;
         }
     }
     equip(player) {
-        if(this.type === 'shield'){
-            player.block += this.add_block_value
-        }
-        player.armour += this.armour
         for(let i = 0; i < this.enchants.length; i ++){
             this.enchants[i].equip(player)
         }
     }
     unequip(player) {
-        if(this.type === 'shield'){
-            player.block -= this.add_block_value
-        }
-        player.armour -= this.armour
         for(let i = 0; i < this.enchants.length; i ++){
             this.enchants[i].unequip(player)
         }
@@ -70,10 +50,6 @@ export class Armour{
         let tooltip = ``;
 
         tooltip += `<p>${this.name}</p>`
-        if(this.type === 'shield'){
-            tooltip += `<p>block chance ${this.add_block_value}</p>`
-        }
-        tooltip += `<p>armour ${this.armour}</p>`
 
         for (let i = 0; i < this.enchants.length; i ++ ){
             tooltip += `<p>${this.enchants[i].tool_tip}</p>`
@@ -83,6 +59,7 @@ export class Armour{
             tooltip += `<p>sell : ${this.sell}</p>`
             tooltip += `<p>buy : ${this.buy}</p>`
         }
+
         return tooltip
     }
 }

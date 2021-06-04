@@ -1,10 +1,11 @@
 import {Loger} from "../loger.js";
+import {Freeze} from "../scripts/Aliment/freeze.js";
 
 export class Icenova{
 
 	constructor() {
 
-		this.chance_to_freeze = 20
+		this.chance_to_freeze = 100
 		this.name = 'ice nova'
 		this.level = 0
 		this.x = 350
@@ -30,7 +31,7 @@ export class Icenova{
 	can(target){
 		return true
 	}
-	get_damage(){
+	getDamage(){
 		return Math.floor(Math.random() * (this.max_damage - this.min_damage) + this.min_damage)
 	}
 	act(player, enemy, stack){
@@ -40,17 +41,13 @@ export class Icenova{
 			for(let xstart = x - 1; xstart <= x + 1; xstart ++){
 				for(let i = 0; i < stack.enemy.length; i++){
 					if(stack.enemy[i].battlePos.y === ystart && stack.enemy[i].battlePos.x === xstart){
-						let d = this.get_damage()
-						stack.enemy[i].hp -= d;
+						let d = this.getDamage()
+						stack.enemy[i].takeDamage(d, player , stack)
 						if(Math.random() * 100 < this.chance_to_freeze){
-							stack.enemy[i].ailment.push(
-								{
-									'type' : 'freeze',
-									'duration' : 2
-								})
-						}
-						if(stack.enemy[i].hp <= 0){
-							stack.enemy[i].die(player,stack)
+							stack.enemy[i].ailments.push(
+								new Freeze(player.freeze_duration)
+							)
+							Loger.addLog(`<p>${stack.enemy[i].name} freezed</p>`)
 						}
 						Loger.addLog(`<p>${this.name} deal ${d} damage</p>`)
 						Loger.damageInfo(d, stack.enemy[i])
