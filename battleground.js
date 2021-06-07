@@ -85,7 +85,7 @@ export class Battleground{
             if(Game.game == 'battle'){
                 switch(Battleground.turn){
                     case 'player':
-                        if(Battleground.player_turn_delay > = 2000){
+                        if(Battleground.player_turn_delay >= 2000){
                             Battleground.playerTurn();
                         }
                         break;
@@ -99,24 +99,18 @@ export class Battleground{
         }
 
         static playerTurn(){
-            // if spell is instantly
-            if(Battleground.clicked_spell){
-                if(Battleground.clicked_spell.can()){
-                    Battleground.clicked_spell.act(Battleground.player, false ,Battleground.enemyStack)
-                    Battleground.turn = 'enemy'
-                    Battleground.clicked_spell = undefined
-                }
-            }
-
+            Loger.addLog(`<p class = 'redtext'>wrong target<p>`)
             let clickResult = Battleground.clickChecker(Battleground.mouseClick);
 
-            if( Battleground.clicked_spell ){
-                if( clickResult instanceof Enemy ){
-                    if(Battleground.clicked_spell.can(clickResult)){
+            if( clickResult ){
+                if( Battleground.clicked_spell ){
+
+                    if( Battleground.clicked_spell.can(clickResult)){
                         if(Battleground.player.current_mana >= Battleground.clicked_spell.mana_cost){
                             Battleground.clicked_spell.act(Battleground.player, clickResult, Battleground.enemyStack)
                             Battleground.clicked_spell = undefined
                             Battleground.turn = 'enemy'
+                            console.log(Battleground.clicked_spell)
                             return
                         }
                         else{
@@ -125,34 +119,51 @@ export class Battleground{
                             Battleground.player_turn_delay = 0
                         }
                     }
+                    else {
+                        return;
+                    }
                 }
-                else if(Math.abs(Battleground.player.battlePos.x - clickResult.battlePos.x) <= 1 && Math.abs(Battleground.player.battlePos.y - clickResult.battlePos.y) <= 1){
-                    Battleground.player.doMelleHit(clickResult, Battleground.enemyStack)
-                    Battleground.turn = `enemy`
+                if(clickResult instanceof Enemy){
+                    if(Math.abs(Battleground.player.battlePos.x - clickResult.battlePos.x) <= 1 && Math.abs(Battleground.player.battlePos.y - clickResult.battlePos.y) <= 1){
+                        Battleground.player.doMelleHit(clickResult, Battleground.enemyStack)
+                        Battleground.turn = `enemy`
+                        return;
+                    }
                 }
 
-            }
-            else if(typeof clickResult === 'object'){
-                if(Battleground.clicked_spell){
-                    if(Battleground.clicked_spell.can(clickResult)){
-                        Battleground.player_turn_delay = 0
-                    }
-                    else{
-                        Loger.addLog(`<p class = 'redtext'>wrong target<p>`)
-                        Battleground.player_turn_delay = 0
-                        Battleground.clicked_spell = undefined
-                    }
-                }
                 else if(Math.abs(Battleground.player.battlePos.x - clickResult.x) <= 1 && Math.abs(Battleground.player.battlePos.y - clickResult.y) <= 1){
                     if(Battleground.plan[clickResult.y][clickResult.x].type !=2 ){
                         Battleground.player.battlePos.x = clickResult.x;
                         Battleground.player.battlePos.y = clickResult.y;
                         Battleground.turn = 'enemy'
+                        return;
                     }
 
                 }
             }
-
+            else {
+                if(Battleground.clicked_spell){
+                    if(Battleground.clicked_spell.can()){
+                        if( Battleground.clicked_spell.can(clickResult)){
+                            if(Battleground.player.current_mana >= Battleground.clicked_spell.mana_cost){
+                                Battleground.clicked_spell.act(Battleground.player, clickResult, Battleground.enemyStack)
+                                Battleground.clicked_spell = undefined
+                                Battleground.turn = 'enemy'
+                                console.log(Battleground.clicked_spell)
+                                return
+                            }
+                            else{
+                                Loger.addLog(`<p class = 'redtext'>not enough mana<p>`)
+                                Battleground.clicked_spell = undefined
+                                Battleground.player_turn_delay = 0
+                            }
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                }
+            }
             Battleground.player_turn_delay +=20
         }
 

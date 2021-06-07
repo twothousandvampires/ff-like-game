@@ -1,5 +1,5 @@
 import {Ailment} from "./Ailment.js";
-import {Loger} from "../../loger";
+import {Loger} from "../../loger.js";
 
 export class Freeze{
 

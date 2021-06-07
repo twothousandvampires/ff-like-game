@@ -1,4 +1,4 @@
-import {EnchantSystem} from "../../enchant_system";
+import {EnchantSystem} from "../../enchant_system.js";
 
 export class jewelry{
 

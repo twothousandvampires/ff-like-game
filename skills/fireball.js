@@ -45,7 +45,7 @@ export class Fireball{
 		}
 
 		can(target){
-			return target instanceof Enemy;
+			return target instanceof Enemy
 		}
 
 		getDamage(){
